@@ -11,6 +11,7 @@
 
 const int philNum = 5;
 std::mutex mutexs[philNum];
+std::mutex coutMutex;
 
 int owner[philNum];
 
@@ -35,7 +36,11 @@ void philFunction (int k, int num) {
                 owner[(k + 1) % philNum] = k;
                 //phil picked the second fork
 
+                coutMutex.lock();
+                
                 std::cout << "Philosopher "<< k << " eats" << std::endl;
+                
+                coutMutex.unlock();
 
                 std::this_thread::sleep_for(std::chrono::microseconds(500));
 
@@ -50,7 +55,7 @@ void philFunction (int k, int num) {
             }    
         }
 
-        std::this_thread::sleep_for(std::chrono::milliseconds(10));
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
 }
 
